@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -79,12 +80,12 @@ namespace Ativ_2_Mentoria.Controllers
             GastoContext db = new GastoContext();
             if (ModelState.IsValid)
             {
-                using (var dbContext = new GastoContext())
-                {
+               
                     Gasto gasto = db.Gastos.First(g => g.Id == id);
-                    gasto.Title = obj.Title;
-                    dbContext.SaveChangesAsync();
-                }
+                    gasto = obj;
+                    db.Gastos.AddOrUpdate(gasto);
+                    db.SaveChangesAsync();
+                
 
                 return RedirectToAction("Index");
             }
